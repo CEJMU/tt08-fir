@@ -1,4 +1,4 @@
-module tt_um_ce_fir (
+module fir (
     input logic clk,
     input logic reset,
     input logic [7:0] x, // Input Signal
