@@ -18,7 +18,7 @@ module tt_um_ce_fir (
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uio_oe  = 0;
-  assign uio_oe  = 8'h00;
+  assign uio_out  = 8'h00;
 
   // List all unused inputs to prevent warnings
   wire _unused = &{ena, 1'b0};
