@@ -21,6 +21,7 @@ module tt_um_ce_fir (
 
   // List all unused inputs to prevent warnings
   wire _unused = &{ena, 1'b0};
+  logic[7:0] _foo = uio_in;
 
   fir fir_inst (
       .clk(clk),
