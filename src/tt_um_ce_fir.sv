@@ -1,34 +1,34 @@
-module tt_um_ce_fir (
-    input logic clk,
-    input logic reset,
-    input logic [7:0] x, // Input Signal
-    output logic [7:0] y // Output Signal
+/*
+ * Copyright (c) 2024 Your Name
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+`default_nettype none
+
+module tt_um_example (
+    input  wire [7:0] ui_in,    // Dedicated inputs
+    output wire [7:0] uo_out,   // Dedicated outputs
+    input  wire [7:0] uio_in,   // IOs: Input path
+    output wire [7:0] uio_out,  // IOs: Output path
+    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
+    input  wire       ena,      // always 1 when the design is powered, so you can ignore it
+    input  wire       clk,      // clock
+    input  wire       rst_n     // reset_n - low to reset
 );
 
-    // Registers:
-    logic [7:0] register [2:0]; // 3 delay elements
+  // All output pins must be assigned. If not used, assign to 0.
+  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  assign uio_out = 0;
+  assign uio_oe  = 0;
 
-    // Coefficients for FIR filter:
-    reg [7:0] coeff [3:0];
-    initial coeff[0] = 8'h01;
-    initial coeff[1] = 8'h02;
-    initial coeff[2] = 8'h03;
-    initial coeff[3] = 8'h04;
+  // List all unused inputs to prevent warnings
+  wire _unused = &{ena, 1'b0};
 
-    always_ff @( posedge clk ) begin
-        if (reset) begin
-            // Reset all registers to zero
-            register[0] <= 8'h0000;
-            register[1] <= 8'h0000;
-            register[2] <= 8'h0000;
-        end else begin
-            register[0] <= x;           // Input to first register
-            register[1] <= register[0]; // Delay by one clock cycle
-            register[2] <= register[1]; // Delay by two clock cycles
-        end
-    end
+  fir fir_inst (
+      .clk(clk),
+      .reset(~rst_n), // Active low reset
+      .x(ui_in),      // Input signal from ui_in
+      .y(uo_out)      // Output signal to uo_out
+  );
 
-    always_comb begin
-        y = x*coeff[0] + register[0]*coeff[1] + register[1]*coeff[2] + register[2]*coeff[3]; // FIR filter output calculation
-    end
 endmodule
