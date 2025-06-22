@@ -19,7 +19,7 @@ async def test_project(dut):
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
-    await Timer(10, units='ns')
+    await Timer(15, units='ns')
     dut.rst_n.value = 1
 
     dut._log.info("Test project behavior")
