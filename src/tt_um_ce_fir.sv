@@ -26,7 +26,7 @@ module tt_um_ce_fir (
 
   fir fir_inst (
       .clk(clk),
-      .reset(~rst_n), // Active low reset
+      .rst(~rst_n), // Active low reset
       .x(ui_in),      // Input signal from ui_in
       .y(uo_out)      // Output signal to uo_out
   );
