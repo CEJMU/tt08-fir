@@ -1,34 +1,39 @@
 module fir (
-    input logic clk,
-    input logic reset,
+    input logic clk,     // Clock Signal
+    input logic rst,     // Reset Signal
     input logic [7:0] x, // Input Signal
     output logic [7:0] y // Output Signal
 );
 
-    // Registers:
-    logic [7:0] register [2:0]; // 3 delay elements
+    // Registers and Coefficients:
+    logic [7:0] r [3:0]; 
+    logic [7:0] c [3:0];
 
-    // Coefficients for FIR filter:
-    reg [7:0] coeff [3:0];
-    initial coeff[0] = 8'h01;
-    initial coeff[1] = 8'h02;
-    initial coeff[2] = 8'h03;
-    initial coeff[3] = 8'h04;
+    initial c[0] = 8'h01;
+    initial c[1] = 8'h02;
+    initial c[2] = 8'h03;
+    initial c[3] = 8'h04;
 
     always_ff @( posedge clk ) begin
-        if (reset) begin
-            // Reset all registers to zero
-            register[0] <= 8'h0000;
-            register[1] <= 8'h0000;
-            register[2] <= 8'h0000;
+        if (rst) begin
+            // Reset everything to zero
+            r[0] <= 8'h00;
+            r[1] <= 8'h00;
+            r[2] <= 8'h00;
+            r[3] <= 8'h00;
         end else begin
-            register[0] <= x;           // Input to first register
-            register[1] <= register[0]; // Delay by one clock cycle
-            register[2] <= register[1]; // Delay by two clock cycles
+            r[0] <= x;    
+            r[1] <= r[0]; 
+            r[2] <= r[1]; 
+            r[3] <= r[2]; 
         end
     end
 
     always_comb begin
-        y = x*coeff[0] + register[0]*coeff[1] + register[1]*coeff[2] + register[2]*coeff[3]; // FIR filter output calculation
+        y = r[0] * c[0]
+          + r[1] * c[1]
+          + r[2] * c[2]
+          + r[3] * c[3]; 
     end
 endmodule
+
