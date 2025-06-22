@@ -18,3 +18,5 @@ Just apply input samples on the input ports and a clock
 ## External hardware
 
 No external HW is required
+
+See also slide-set in the repro.
